@@ -1,0 +1,51 @@
+<p-button (click)="getMore()" [disabled]="!pokemons.next" class="get-more">Obtener más </p-button>
+<p-button (click)="getPrevious()" [disabled]="!pokemons.previous" class="get-previous">Obtener menos </p-button>
+<p-table [value]="pokemons.results" [paginator]="true" [rows]="5" [(selection)]="selectedPokemon"
+  [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" selectionMode="single"
+  (onRowSelect)="onRowSelect($event)" [rowsPerPageOptions]="[10, 25, 50]">
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width:25%">Name</th>
+      <th style="width:25%">Url</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-customer>
+    <tr [pSelectableRow]="customer">
+      <td>{{ customer.name }}</td>
+      <td>{{ customer.url }}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft">
+    <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+  </ng-template>
+  <ng-template pTemplate="paginatorright">
+    <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-table>
+<p-button (click)="showDialog()" icon="pi pi-external-link" label="Show"></p-button>
+<p-dialog *ngIf="detailsPokemon" header="{{detailsPokemon.name | uppercase}} DETALLES" [(visible)]="visible"
+  [style]="{width: '50vw'}">
+  <p-carousel [value]="detailsPokemon.images" [numVisible]="2" [numScroll]="2" [circular]="true"
+    [responsiveOptions]="responsiveOptions">
+    <ng-template let-pokemon pTemplate="item">
+      <div class="border-1 surface-border border-round m-2 text-center py-5 px-3">
+        <div class="mb-3">
+          <img [src]="pokemon" [alt]="pokemon" class="w-6 shadow-2" />
+      </div>
+      </div>
+    </ng-template>
+  </p-carousel>
+  <h3>Habilidades</h3>
+  <p-scroller [items]="getAbilities()" [itemSize]="50" scrollHeight="200px" styleClass="border-1 surface-border" [style]="{'width': '200px', 'height': '200px'}">
+    <ng-template pTemplate="item" let-item let-options="options">
+        <div class="flex align-items-center p-2" style="height: 50px;">{{ item.ability.name }}</div>
+    </ng-template>
+</p-scroller>
+<h3>Juegos</h3>
+<p-scroller [items]="getGames()" [itemSize]="50" scrollHeight="200px" styleClass="border-1 surface-border" [style]="{'width': '200px', 'height': '200px'}">
+  <ng-template pTemplate="item" let-item let-options="options">
+      <div class="flex align-items-center p-2" style="height: 50px;">{{ item.version.name }}</div>
+  </ng-template>
+</p-scroller>
+</p-dialog>
